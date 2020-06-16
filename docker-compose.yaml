@@ -1,0 +1,33 @@
+version: "3"
+services:
+  backend:
+    build: ./backend
+    ports: 
+      - 3000:3000
+    environment:
+      - PORT=3000
+      - DB_HOST=mysql
+      - DB_USER=root
+      - DB_PASS=password
+    volumes:
+      - ./backend:/home/app
+    expose:
+      - 3000
+  frontend:
+    build: ./frontend
+    ports: 
+      - 80:3000
+    environment:
+      - PORT=3000
+    volumes:
+      - ./frontend:/home/app
+    tty: true
+  mysql:
+    image: mysql:5
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: testDB
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+    expose: 
+      - 3306
